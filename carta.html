@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carta</title>
+<style>
+body{font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;padding:24px;background:#faf7f8;color:#2a2327;text-align:center}
+main{max-width:360px}h1{font-size:1.4rem}p{line-height:1.5}
+</style></head><body><main>
+<h1 id="t">Verificando chave…</h1><p id="m"></p>
+</main>
+<script>
+var PAYLOAD='bSe5jJbHoKCqpgZVD70g39THqTinbItgBQ2BrkxK-ClxD_yKIsQ7yjlDkiIUMXhYXyKUC76mqyi6rPWtY--XjCeK8Pgx3lS2VCziVzpBzLCgVw3gOqjdtw';
+function d(s){s=s.replace(/-/g,'+').replace(/_/g,'/');var b=atob(s),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a;}
+(async function(){
+  var t=document.getElementById('t'),m=document.getElementById('m');
+  function negar(){t.textContent='Acesso negado';m.textContent='Este aparelho não tem a chave instalada.';}
+  var k;try{k=localStorage.getItem('chave-carta');}catch(e){}
+  if(!k||!window.crypto||!crypto.subtle){negar();return;}
+  try{
+    var key=await crypto.subtle.importKey('raw',d(k),'AES-GCM',false,['decrypt']);
+    var p=d(PAYLOAD);
+    var pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:p.slice(0,12)},key,p.slice(12));
+    t.textContent='Acesso liberado ✓';
+    m.textContent=new TextDecoder().decode(pt);
+  }catch(e){negar();}
+})();
+</script></body></html>

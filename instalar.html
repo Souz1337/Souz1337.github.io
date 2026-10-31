@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Instalar chave</title>
+<style>
+body{font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;padding:24px;background:#faf7f8;color:#2a2327;text-align:center}
+main{max-width:360px}h1{font-size:1.4rem}p{line-height:1.5}
+</style></head><body><main>
+<h1 id="t">Instalando chave…</h1><p id="m"></p>
+</main>
+<script>
+(function(){
+  var t=document.getElementById('t'),m=document.getElementById('m');
+  var k=location.hash.slice(1);
+  if(!k){t.textContent='Nenhuma chave no link';m.textContent='Peça para reenviar o link completo, com tudo depois do #.';return;}
+  try{
+    localStorage.setItem('chave-carta',k);
+    history.replaceState(null,'',location.pathname);
+    t.textContent='Chave instalada ✓';
+    m.textContent='Agora é só abrir o link da carta neste mesmo navegador.';
+  }catch(e){
+    t.textContent='Não foi possível instalar';
+    m.textContent='Saia da aba anônima ou libere o armazenamento do navegador.';
+  }
+})();
+</script></body></html>
